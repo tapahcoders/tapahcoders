@@ -15,80 +15,58 @@ bool fits_into(int s, int b, int n, int **source) {
   return true;
 }
 
-void print_row(int r, int n, int **source) {
-
-  string sep = "";
-  cout << "[";
-  for (int i = 0; i < n; i++) {
-    cout << sep << source[r][i];
-    sep = ", ";
-  }
-  cout << "]";
-}
-
-void append_to(map<int, vi *> &count_map, int count, int i) {
-  // cout << "adding " << i << " to " << count << endl;
-  if (0 == count_map[count]) {
-    vi *vip = new vi();
-    vip->push_back(i);
-    count_map[count] = vip;
-  } else {
-    count_map[count]->push_back(i);
-    // cout << "length of map[" << count << "] is now " <<
-    // count_map[count]->size() << endl;
-  }
-}
-int process_row(int i, int *sequence, map<int, vi *> &count_map, int max_count,
-                int k, int n, int **source) {
-  // cout << "max count => " << max_count << endl;
-  for (int c = max_count; c >= 1; c--) {
-    vi *vip = count_map[c];
-    for (vi::iterator it = vip->begin(); vip->end() != it; ++it) {
-      if (fits_into(*it, i, n, source)) {
-        sequence[i + 1] = (*it) + 1;
-        // cout << (*it) << " fits into " << i << endl;
-        return c + 1;
+int process_row(int value, int n, int **source, map<int, vi *> &count_map,
+                int max_count) {
+  for (int i = max_count; i >= 1; i--) {
+    vi *vip = count_map[i];
+    for (vi::iterator it = vip->begin(); it != vip->end(); ++it) {
+      cout << "testing with all elements with length = " << i << endl;
+      if (fits_into(*it, value, n, source)) {
+        cout << *it << " is smaller than " << value << endl;
+        return i + 1;
       } else {
-        // cout << (*it) << " does not fit into " << i << endl;
+        cout << *it << " is NOT smaller than " << value << endl;
       }
     }
   }
   return 1;
 }
-void display_sequence(int *sequence, int k) {
-  cout << "sequence => [";
-  for (int i = 1; i <= k; i++) {
-    cout << sequence[i] << " ";
-  }
-  cout << "]" << endl;
-}
-void display_sequence() { cout << "xxx" << endl; }
-void display_max_count(int max_count) { cout << max_count << endl; }
-int process(int k, int n, int **source) {
-  map<int, vi *> count_map;
-  int max_count = 0;
-  int *sequence = new int[k + 1];
-  sequence[0] = 0;
-  for (int i = 0; i < k; i++) {
-    sequence[i + 1] = -1;
-    int count = process_row(i, sequence, count_map, max_count, k, n, source);
-    append_to(count_map, count, i);
-    max_count = max(max_count, count);
-    display_sequence(sequence, k);
-    // cout << endl;
-  }
-  return max_count;
-  // cout << "max count = " << max_count << endl;
-  // cout << count_map[max_count]->size() << endl;
-}
 
-void display_content(int k, int n, int **source) {
-  for (int r = 0; r < k; r++) {
-    for (int i = 0; i < n; i++) {
-      cout << source[r][i] << " ";
+void display_count_map(map<int, vi *> &count_map, int max_count) {
+  cout << "count map" << endl;
+  for (int i = 1; i <= max_count; i++) {
+    vi *vip = count_map[i];
+    cout << i << ": ";
+    string sep = "";
+    for (vi::iterator it = vip->begin(); it != vip->end(); ++it) {
+      cout << sep << *it;
+      sep = ", ";
     }
     cout << endl;
   }
+}
+
+void process(int k, int n, int **source) {
+  int *sequence = new int[k];
+  map<int, vi *> count_map;
+  for (int i = 0; i < k; i++) {
+    sequence[i] = -1;
+    count_map[i + 1] = new vi();
+  }
+
+  int max_count = 0;
+  for (int i = 0; i < k; i++) {
+    int count = process_row(i, n, source, count_map, max_count);
+    count_map[count]->push_back(i);
+    max_count = max(max_count, count);
+  }
+
+  display_count_map(count_map, max_count);
+
+  for (int i = 0; i < k; i++) {
+    delete count_map[i + 1];
+  }
+  delete[] sequence;
 }
 
 bool compare(int *a, int *b) { return a[0] < b[0]; }
@@ -106,13 +84,14 @@ void process(int k, int n) {
   sort(source, source + k, compare);
 
   // display content
-  // display_content(k, n, source);
+  for (int r = 0; r < k; r++) {
+    for (int i = 0; i < n; i++) {
+      cout << source[r][i] << " ";
+    }
+    cout << endl;
+  }
 
-  int max_count = process(k, n, source);
-  display_max_count(max_count);
-  display_sequence();
-
-
+  process(k, n, source);
 
   for (int i = 0; i < k; i++) {
     delete[] source[i];
