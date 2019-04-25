@@ -64,21 +64,20 @@ void display_sequence(int *sequence, int k) {
 }
 void display_sequence() { cout << "xxx" << endl; }
 void display_max_count(int max_count) { cout << max_count << endl; }
-void process(int k, int n, int **source) {
+int process(int k, int n, int **source) {
   map<int, vi *> count_map;
   int max_count = 0;
   int *sequence = new int[k + 1];
   sequence[0] = 0;
   for (int i = 0; i < k; i++) {
-    sequence[i + 1] = i + 1;
+    sequence[i + 1] = -1;
     int count = process_row(i, sequence, count_map, max_count, k, n, source);
     append_to(count_map, count, i);
     max_count = max(max_count, count);
     display_sequence(sequence, k);
     // cout << endl;
   }
-  display_max_count(max_count);
-  display_sequence();
+  return max_count;
   // cout << "max count = " << max_count << endl;
   // cout << count_map[max_count]->size() << endl;
 }
@@ -109,7 +108,11 @@ void process(int k, int n) {
   // display content
   // display_content(k, n, source);
 
-  process(k, n, source);
+  int max_count = process(k, n, source);
+  display_max_count(max_count);
+  display_sequence();
+
+
 
   for (int i = 0; i < k; i++) {
     delete[] source[i];
