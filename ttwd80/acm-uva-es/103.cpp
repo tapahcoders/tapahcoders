@@ -217,6 +217,14 @@ void print_sequence(stack<int> &st) {
   cout << endl;
 }
 
+void display_content(int k, int n, int **source) {
+  for (int r = 0; r < k; r++) {
+    for (int i = 0; i < n; i++) {
+      cout << source[r][i] << " ";
+    }
+    cout << endl;
+  }
+}
 /*
  * as the array is created, stores the original position and the pointer to a
  * map after the array is sorted, store new pointer and new position to a map.
@@ -247,12 +255,7 @@ void process(int k, int n) {
   }
 
   // display content
-  // for (int r = 0; r < k; r++) {
-  // for (int i = 0; i < n; i++) {
-  // cout << source[r][i] << " ";
-  //}
-  // cout << endl;
-  //}
+  // display_content(k, n, source);
 
   int track = -1;
   int max_count = process(k, n, source, sequence, track);
