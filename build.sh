@@ -15,9 +15,11 @@ do
     BASENAME=$(basename $f .cpp)
     echo "BASENAME => ${BASENAME}"
     g++ -g -Wall ${BASENAME}.cpp -o ${BASENAME}
+    ls -l ${BASENAME}.in.txt
     ./${BASENAME} < ${BASENAME}.in.txt > ${BASENAME}.result.txt
     echo "Result is"
     cat ${BASENAME}.result.txt
+    ls -l ${BASENAME}.out.txt
     diff -Naur ${BASENAME}.result.txt ${BASENAME}.out.txt
   fi
 done
