@@ -38,13 +38,14 @@ void append_to(map<int, vi *> &count_map, int count, int i) {
     // count_map[count]->size() << endl;
   }
 }
-int process_row(int i, map<int, vi *> &count_map, int max_count, int k, int n,
-                int **source) {
+int process_row(int i, int *sequence, map<int, vi *> &count_map, int max_count,
+                int k, int n, int **source) {
   // cout << "max count => " << max_count << endl;
   for (int c = max_count; c >= 1; c--) {
     vi *vip = count_map[c];
     for (vi::iterator it = vip->begin(); vip->end() != it; ++it) {
       if (fits_into(*it, i, n, source)) {
+        sequence[i + 1] = (*it) + 1;
         // cout << (*it) << " fits into " << i << endl;
         return c + 1;
       } else {
@@ -54,15 +55,26 @@ int process_row(int i, map<int, vi *> &count_map, int max_count, int k, int n,
   }
   return 1;
 }
+void display_sequence(int *sequence, int k) {
+  cout << "sequence => [";
+  for (int i = 1; i <= k; i++) {
+    cout << sequence[i] << " ";
+  }
+  cout << "]" << endl;
+}
 void display_sequence() { cout << "xxx" << endl; }
 void display_max_count(int max_count) { cout << max_count << endl; }
 void process(int k, int n, int **source) {
   map<int, vi *> count_map;
   int max_count = 0;
+  int *sequence = new int[k + 1];
+  sequence[0] = 0;
   for (int i = 0; i < k; i++) {
-    int count = process_row(i, count_map, max_count, k, n, source);
+    sequence[i + 1] = i + 1;
+    int count = process_row(i, sequence, count_map, max_count, k, n, source);
     append_to(count_map, count, i);
     max_count = max(max_count, count);
+    display_sequence(sequence, k);
     // cout << endl;
   }
   display_max_count(max_count);
