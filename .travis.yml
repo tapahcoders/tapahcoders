@@ -1,7 +1,4 @@
 language: cpp
 dist: xenial
 script:
-   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo $TRAVIS_PULL_REQUEST; fi'
-   - 'export FILES_CHANGED=$(git diff --name-only HEAD^1)'
-   - 'echo $FILES_CHANGED'
-   - 'pwd'
+   - './build.sh'
