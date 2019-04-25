@@ -14,7 +14,7 @@ do
     cd ${DIRNAME}
     BASENAME=$(basename $f .cpp)
     echo "BASENAME => ${BASENAME}"
-    g++ -g -Wall ${BASENAME}.cpp -o ${BASENAME}
+    g++ -std=c++11 -g -Wall ${BASENAME}.cpp -o ${BASENAME}
     ls -l ${BASENAME}.in.txt
     ./${BASENAME} < ${BASENAME}.in.txt > ${BASENAME}.result.txt
     echo "Result is"
