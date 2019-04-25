@@ -1,2 +1,2 @@
 script:
-   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; echo $TRAVIS_PULL_REQUEST; fi'
+   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo $TRAVIS_PULL_REQUEST; fi'
