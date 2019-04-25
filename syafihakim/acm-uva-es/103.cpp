@@ -10,7 +10,7 @@ bool comp(piv a, piv b) {
 }
 
 bool inside(vi a, vi b) {
-    for(int i = 0; i < a.size(); i++) {
+    for(unsigned int i = 0; i < a.size(); i++) {
         if(a[i] >= b[i])
             return false;
     }
